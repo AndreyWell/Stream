@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -40,19 +41,23 @@ public class Main {
                 .filter(person -> person.getEducation() == Education.HIGHER)
                 .filter(person -> person.getAge() >= 18)
                 .filter(person -> person.getAge() < 65)
-                .limit(20)
-                .sorted(Comparator.comparing(Person::getFamily))
                 .collect(Collectors.toList());
-        System.out.printf("Работники мужчины: %s\n", manWorking);
 
         List<Person> womenWorking = persons.stream()
                 .filter(person -> person.getSex() == Sex.WOMAN)
                 .filter(person -> person.getEducation() == Education.HIGHER)
                 .filter(person -> person.getAge() >= 18)
                 .filter(person -> person.getAge() < 60)
-                .limit(20)
+                .collect(Collectors.toList());
+;
+        manWorking.addAll(womenWorking);
+        System.out.printf("Количество потенциальных работников: %,d\n", manWorking.size());
+
+        List<Person> workingMen = manWorking.stream()
+                .sorted(Comparator.comparing(Person::getAge))
+                .limit(50)
                 .sorted(Comparator.comparing(Person::getFamily))
                 .collect(Collectors.toList());
-        System.out.printf("Работники женщины: %s\n", womenWorking);
+        System.out.printf("Потенциальные работники: %s\n", workingMen);
     }
 }
